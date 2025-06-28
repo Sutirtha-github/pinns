@@ -2,7 +2,7 @@
 
 This work is a demonstration of implementing PINN from scratch using Pytorch in order to learn the solutions of a **generalized Lindblad master equation** as well as its inverse problem of bath parameter estimation.
 
-
+<p></p>
 
 ## Problem overview
 
@@ -44,6 +44,7 @@ where, the time-dependent amplitude $E_0(\tau)$ and the mixing angle $\theta(\ta
 $\hspace{1cm}E_0(\tau) = \Omega_0\tau(1-\tau) \\
 \hspace{3cm}\theta(\tau) = \pi \tau^2(3-2\tau)$
 
+<p></p>
 
 ## Workflow overview
 
@@ -63,7 +64,7 @@ $\hspace{1cm}E_0(\tau) = \Omega_0\tau(1-\tau) \\
 
 
 
-
+<p></p>
 
 ## Task 1: Simulation
 
@@ -105,7 +106,7 @@ $\hspace{1.5cm}+\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[
 
 To compute gradients of the neural network with respect to its inputs, we will use $torch.autograd.grad()$
 
-<br>
+<p></p>
 
 # Task 2: Inverse Problem
 
