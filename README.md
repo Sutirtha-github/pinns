@@ -93,11 +93,11 @@ where,
 
 $\mathcal{L}_{boundary} = \frac{1}{3}[(NN(0,\mathbf{w})[0] - 0)^2 + (NN(0,\mathbf{w})[1] - 0)^2 + (NN(0,\mathbf{w})[2] + 0.5)^2]$
 
-$L_{physics} = \frac{1}{3}[\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[0] + \frac{\Omega}{\Lambda}(\gamma_a - \gamma_e) + \frac{\Delta^2+2\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[0] + ΔNN(t_i,\mathbf{w})[1] - \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[2])^2$ 
+$L_{physics} = \frac{1}{3}[\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[0] + \frac{\Omega}{\Lambda}(\gamma_a - \gamma_e) + \frac{\Delta^2+2\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e) NN(t_i,\mathbf{w})[0] + \Delta * NN(t_i,\mathbf{w})[1] - \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e) NN(t_i,\mathbf{w})[2])^2$ 
 
-$\hspace{2cm}+\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[1] - \Delta NN(t_i,\mathbf{w})[0] + \frac{\gamma_a + \gamma_e}{2} NN(t_i,\mathbf{w})[1] - \Omega NN(t_i,\mathbf{w})[2])^2$
+$\hspace{1.5cm}+\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[1] - \Delta * NN(t_i,\mathbf{w})[0] + \frac{\gamma_a + \gamma_e}{2} NN(t_i,\mathbf{w})[1] - \Omega * NN(t_i,\mathbf{w})[2])^2$
 
-$\hspace{1.25cm}+\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[2] - \frac{\Delta}{\Lambda}(\gamma_a - \gamma_e) - \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[0] + \Omega NN(t_i,\mathbf{w})[1] +\frac{2\Delta^2+\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[2])^2]$
+$\hspace{1.5cm}+\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[2] - \frac{\Delta}{\Lambda}(\gamma_a - \gamma_e) - \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[0] + \Omega * NN(t_i,\mathbf{w})[1] +\frac{2\Delta^2+\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e) NN(t_i,\mathbf{w})[2])^2]$
 
 
 
@@ -105,7 +105,7 @@ $\hspace{1.25cm}+\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})
 
 To compute gradients of the neural network with respect to its inputs, we will use $torch.autograd.grad()$
 
-
+<br>
 
 # Task 2: Inverse Problem
 
