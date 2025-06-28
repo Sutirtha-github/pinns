@@ -113,7 +113,7 @@ To compute gradients of the neural network with respect to its inputs, we will u
 
 # Task 2: Inverse Problem
 
-**Given the differential equations along with a limited no.(say M) of noisy data points (representing costly and error prone measurements) and the spectral density parameter *A* is unknown, can a PINN learn the unknown parameter (and the solution as well) from the small and noisy dataset?**
+**Given the differential equations along with a limited no.(say M) of noisy data points (representing costly and error prone measurements) and the spectral density parameter *A* (or $\omega_c$) is unknown, can a PINN learn the unknown parameter (and the solution as well) from the small and noisy dataset?**
 
 <br>
 
