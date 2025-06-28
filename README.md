@@ -16,15 +16,15 @@ Denote by **s**(t) = $[s_x(t), s_y(t), s_z(t)]$ the instantaneous Bloch vector c
 
 The evolution of **s** (denoting the quantum dot density matrix) is governed by the following set of differential equations:
 
-$\hspace{3cm}\dot{s_x} = - \frac{\Omega}{\Lambda}(\gamma_a - \gamma_e) - \frac{\Delta^2+2\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e)s_x - Δs_y + \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)s_z \\
-\hspace{3cm}\dot{s_y} = \Delta s_x - \frac{\gamma_a + \gamma_e}{2} s_y + \Omega s_z \\
+$\hspace{3cm}\dot{s_x} = - \frac{\Omega}{\Lambda}(\gamma_a - \gamma_e) - \frac{\Delta^2+2\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e)s_x - Δs_y + \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)s_z \vspace{1cm}
+\hspace{3cm}\dot{s_y} = \Delta s_x - \frac{\gamma_a + \gamma_e}{2} s_y + \Omega s_z \vspace{1cm}
 \hspace{3cm}\dot{s_z} = \frac{\Delta}{\Lambda}(\gamma_a - \gamma_e) + \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)s_x - \Omega s_y - \frac{2\Delta^2+\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e)s_z$
 
 where,
 $\Lambda = \sqrt{\Omega^2 + \Delta^2}$ denotes the instantaneoues eigenstate splitting, and the phonon absorption and emission rates are given by
 
-$\hspace{5cm}\gamma_a = 2 \left(\frac{\Omega}{2\Lambda} \right)^2 \pi J(\Lambda) n_b(\Lambda) \\
-\hspace{5cm}\gamma_e = 2 \left(\frac{\Omega}{2\Lambda} \right)^2 \pi J(\Lambda) [1 + n_b(\Lambda)]$
+$\hspace{1cm}\gamma_a = 2 \left(\frac{\Omega}{2\Lambda} \right)^2 \pi J(\Lambda) n_b(\Lambda)
+\hspace{3cm}\gamma_e = 2 \left(\frac{\Omega}{2\Lambda} \right)^2 \pi J(\Lambda) [1 + n_b(\Lambda)]$
 
 Here,
 
