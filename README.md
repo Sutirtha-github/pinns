@@ -85,7 +85,7 @@ $\hspace{6cm} s_x(t) ≡ NN(t,\mathbf{w})[0] \\ \hspace{6cm} s_y(t) ≡ NN(t,\ma
 
 To simulate the two-level quantum dot system, the PINN is trained with the following loss function
 
-$\hspace{6cm} \mathcal{L}(\mathbf{w}) = \mathcal{L}_{boundary} + \mathcal{L}_{physics}$
+$\mathcal{L}(\mathbf{w}) = \mathcal{L}_{boundary} + \mathcal{L}_{physics}$
 
 where,
 
