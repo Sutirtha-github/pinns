@@ -79,7 +79,7 @@ over the time range [0, D (pulse duration)]
 
 * Inputs of NN: t
 
-* Outputs of NN: $s_x(t), s_y(t), s_z(t)$ i.e.
+* Outputs of NN: $s_x(t)$, $s_y(t)$,  $s_z(t)$ i.e.
 
 $s_x(t) ≡ NN(t,\mathbf{w})[0] \hspace{3cm} s_y(t) ≡ NN(t,\mathbf{w})[1]  \hspace{3cm} s_z(t) ≡ NN(t,\mathbf{w})[2]$
 
@@ -87,13 +87,13 @@ $s_x(t) ≡ NN(t,\mathbf{w})[0] \hspace{3cm} s_y(t) ≡ NN(t,\mathbf{w})[1]  \hs
 
 To simulate the two-level quantum dot system, the PINN is trained with the following loss function
 
-$\mathcal{L}(\mathbf{w}) = \mathcal{L}_{boundary} + \mathcal{L}_{physics}$
+$L(\mathbf{w}) = L_{boundary} + L_{physics}$
 
 where,
 
 $\mathcal{L}_{boundary} = \frac{1}{3}[(NN(0,\mathbf{w})[0] - 0)^2 + (NN(0,\mathbf{w})[1] - 0)^2 + (NN(0,\mathbf{w})[2] + 0.5)^2]$
 
-$\mathcal{L}_{physics} = \frac{1}{3}[\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[0] + \frac{\Omega}{\Lambda}(\gamma_a - \gamma_e) + \frac{\Delta^2+2\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[0] + ΔNN(t_i,\mathbf{w})[1] - \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[2])^2$ 
+$L_{physics} = \frac{1}{3}[\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[0] + \frac{\Omega}{\Lambda}(\gamma_a - \gamma_e) + \frac{\Delta^2+2\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[0] + ΔNN(t_i,\mathbf{w})[1] - \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[2])^2$ 
 
 $\hspace{2cm}+\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[1] - \Delta NN(t_i,\mathbf{w})[0] + \frac{\gamma_a + \gamma_e}{2} NN(t_i,\mathbf{w})[1] - \Omega NN(t_i,\mathbf{w})[2])^2$
 
