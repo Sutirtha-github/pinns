@@ -7,9 +7,9 @@ def generate_data(sx, sy, sz, D, noise_std=0.004, M=50, seed=2021, plot=False):
 
     Parameters:
         sx, sy, sz : array-like
-            Clean Bloch vector components over time.
+            Numerically calculated Bloch vector components as function of time.
         D : float
-            Total simulation duration.
+            Pulse duration.
         noise_std : float
             Standard deviation of Gaussian noise.
         M : int
