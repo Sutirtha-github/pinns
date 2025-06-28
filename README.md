@@ -2,7 +2,7 @@
 
 This work is a demonstration of implementing PINN from scratch using Pytorch in order to learn the solutions of a **generalized Lindblad master equation** as well as its inverse problem of bath parameter estimation.
 
-<p></p>
+<br><br>
 
 ## Problem overview
 
