@@ -6,7 +6,22 @@ from data.data_utils import rabi_freq, detuning, mixangle, eig_split, phonon_abs
 
 
 def bloch_eqs(t, S, A, v_c, T, D, Om_0):
-    """Right-hand side of the Bloch equations for the system."""
+    """
+    Computes LHS of the Lindblad differential equations.
+
+    Args:
+        t: time instance in [0,D] (ps)
+        S: Bloch vector coordinates at time t
+        A: system-bath coupling strength (ps/K)
+        v_c: cutoff frequency (1/ps)
+        T: bath temperature (K)
+        D: pulse duration (ps)
+        Om_0: rabi frequency amplitude (1/ps)
+        
+    Returns:
+        dsx_dt, dsy_dt, dsz_dt: time derivative of Bloch vector coordinates
+    """
+    
     sx, sy, sz = S
     eps = 1e-10
     t_tensor = torch.tensor([t], dtype=torch.float32)
@@ -31,19 +46,20 @@ def bloch_eqs(t, S, A, v_c, T, D, Om_0):
 
 def generate_bloch_trajectory(A, v_c, T, D, Om_0, S0=[0.0, 0.0, -1.0], t_intervals=150, return_tensor=True, plot=False):
     """
-    Numerically solve the Bloch equations for a given setup.
+    Numerically solve the Bloch equations for a given initial condition.
 
     Args:
-        D: Total duration
-        Om_0: Maximum Rabi frequency
-        S0: Initial Bloch vector [sx0, sy0, sz0]
-        t_intervals: Number of time points
-        return_tensor: If True, returns PyTorch tensors, else NumPy arrays
-        plot: If True, plots the results
+        D: pulse duration (ps)
+        Om_0: rabi frequency amplitude (1/ps))
+        S0: initial Bloch vector coordinates [sx0 = 0, sy0 = 0, sz0 = -1]
+        t_intervals: # time points between 0 to D
+        return_tensor: if True, returns PyTorch tensors, else NumPy arrays
+        plot: if True, plots the results
 
     Returns:
         t, sx, sy, sz: time series and Bloch components
     """
+    
     t_span = (0, D)
     t_eval = np.linspace(t_span[0], t_span[1], t_intervals)
     S0 = np.array(S0, dtype=float)
