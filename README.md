@@ -81,7 +81,7 @@ over the time range [0, D (pulse duration)]
 
 * Outputs of NN: $s_x(t), s_y(t), s_z(t)$ i.e.
 
-$ s_x(t) ≡ NN(t,\mathbf{w})[0] \\ \hspace{3cm} s_y(t) ≡ NN(t,\mathbf{w})[1] \\ \hspace{3cm} s_z(t) ≡ NN(t,\mathbf{w})[2]$
+$s_x(t) ≡ NN(t,\mathbf{w})[0] \hspace{3cm} s_y(t) ≡ NN(t,\mathbf{w})[1]  \hspace{3cm} s_z(t) ≡ NN(t,\mathbf{w})[2]$
 
 ### Defining the Loss
 
@@ -93,8 +93,10 @@ where,
 
 $\mathcal{L}_{boundary} = \frac{1}{3}[(NN(0,\mathbf{w})[0] - 0)^2 + (NN(0,\mathbf{w})[1] - 0)^2 + (NN(0,\mathbf{w})[2] + 0.5)^2]$
 
-$\mathcal{L}_{physics} = \frac{1}{3}[\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[0] + \frac{\Omega}{\Lambda}(\gamma_a - \gamma_e) + \frac{\Delta^2+2\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[0] + ΔNN(t_i,\mathbf{w})[1] - \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[2])^2$ \\
-$\hspace{2cm}+\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[1] - \Delta NN(t_i,\mathbf{w})[0] + \frac{\gamma_a + \gamma_e}{2} NN(t_i,\mathbf{w})[1] - \Omega NN(t_i,\mathbf{w})[2])^2$ \\
+$\mathcal{L}_{physics} = \frac{1}{3}[\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[0] + \frac{\Omega}{\Lambda}(\gamma_a - \gamma_e) + \frac{\Delta^2+2\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[0] + ΔNN(t_i,\mathbf{w})[1] - \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[2])^2$ 
+
+$\hspace{2cm}+\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[1] - \Delta NN(t_i,\mathbf{w})[0] + \frac{\gamma_a + \gamma_e}{2} NN(t_i,\mathbf{w})[1] - \Omega NN(t_i,\mathbf{w})[2])^2$
+
 $\hspace{1.25cm}+\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[2] - \frac{\Delta}{\Lambda}(\gamma_a - \gamma_e) - \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[0] + \Omega NN(t_i,\mathbf{w})[1] +\frac{2\Delta^2+\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[2])^2]$
 
 
@@ -127,8 +129,10 @@ $\hspace{6cm} \mathcal{L}(\mathbf{w}, \mathcal{A}) = \mathcal{L}_{physics} + \la
 
 where,
 
-$\mathcal{L}_{physics} = \frac{1}{3}[\frac{1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[0] + \frac{\Omega}{\Lambda}(\gamma_a - \gamma_e) + \frac{\Delta^2+2\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[0] + ΔNN(t_i,\mathbf{w})[1] - \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[2])^2 $\\
-$\hspace{2cm}+\frac{1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[1] - \Delta NN(t_i,\mathbf{w})[0] + \frac{\gamma_a + \gamma_e}{2} NN(t_i,\mathbf{w})[1] - \Omega NN(t_i,\mathbf{w})[2])^2 $\\
+$\mathcal{L}_{physics} = \frac{1}{3}[\frac{1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[0] + \frac{\Omega}{\Lambda}(\gamma_a - \gamma_e) + \frac{\Delta^2+2\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[0] + ΔNN(t_i,\mathbf{w})[1] - \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[2])^2 $
+
+$\hspace{2cm}+\frac{1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[1] - \Delta NN(t_i,\mathbf{w})[0] + \frac{\gamma_a + \gamma_e}{2} NN(t_i,\mathbf{w})[1] - \Omega NN(t_i,\mathbf{w})[2])^2 $
+
 $\hspace{1.25cm}+\frac{1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[2] - \frac{\Delta}{\Lambda}(\gamma_a - \gamma_e) - \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[0] + \Omega NN(t_i,\mathbf{w})[1] +\frac{2\Delta^2+\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[2])^2]$
 
 $\mathcal{L}_{obs} = \frac{1}{3}[\frac{\lambda}{M} \sum_{j=1}^M(NN(t_j,\mathbf{w}, \mathcal{A})[0] - s_x^{obs})^2 + \frac{\lambda}{M} \sum_{j=1}^M(NN(t_j,\mathbf{w}, \mathcal{A})[1] - s_y^{obs})^2 + \frac{\lambda}{M} \sum_{j=1}^M(NN(t_j,\mathbf{w}, \mathcal{A})[2] - s_z^{obs})^2]$
