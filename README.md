@@ -44,7 +44,7 @@ where, the time-dependent amplitude $E_0(\tau)$ and the mixing angle $\theta(\ta
 $\hspace{1cm}E_0(\tau) = \Omega_0\tau(1-\tau) \\
 \hspace{3cm}\theta(\tau) = \pi \tau^2(3-2\tau)$
 
-<p></p>
+<br><br>
 
 ## Workflow overview
 
@@ -63,12 +63,13 @@ $\hspace{1cm}E_0(\tau) = \Omega_0\tau(1-\tau) \\
     *F(****a****)* = *b*
 
 
-
-<p></p>
+<br><br>
 
 ## Task 1: Simulation
 
 **Given the differential equations and the boundary conditions, can a PINN learn the solutions of the Lindblad master equations?**
+
+<br>
 
 ### Approach
 
@@ -83,6 +84,8 @@ over the time range [0, D (pulse duration)]
 * Outputs of NN: $s_x(t)$, $s_y(t)$,  $s_z(t)$ i.e.
 
 $s_x(t) ≡ NN(t,\mathbf{w})[0] \hspace{3cm} s_y(t) ≡ NN(t,\mathbf{w})[1]  \hspace{3cm} s_z(t) ≡ NN(t,\mathbf{w})[2]$
+
+<br>
 
 ### Defining the Loss
 
@@ -100,18 +103,19 @@ $\hspace{1.5cm}+\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[
 
 $\hspace{1.5cm}+\frac{\lambda_1}{N} \sum_{i=1}^N(\frac{d}{dt}NN(t_i,\mathbf{w})[2] - \frac{\Delta}{\Lambda}(\gamma_a - \gamma_e) - \frac{\Delta\Omega}{2\Lambda^2}(\gamma_a + \gamma_e)NN(t_i,\mathbf{w})[0] + \Omega * NN(t_i,\mathbf{w})[1] +\frac{2\Delta^2+\Omega^2}{2\Lambda^2}(\gamma_a + \gamma_e) NN(t_i,\mathbf{w})[2])^2]$
 
-
+<br>
 
 ### Computing gradients
 
 To compute gradients of the neural network with respect to its inputs, we will use $torch.autograd.grad()$
 
-<p></p>
+<br><br>
 
 # Task 2: Inverse Problem
 
 **Given the differential equations along with a limited no.(say M) of noisy data points (representing costly and error prone measurements) and the spectral density parameter *A* is unknown, can a PINN learn the unknown parameter (and the solution as well) from the small and noisy dataset?**
 
+<br>
 
 ### Approach
 
@@ -121,6 +125,7 @@ $\hspace{6cm}NN(t,\mathbf{w},\mathcal{A}) \approx \mathbf{s}(t)$
 
 over the time range [0, D (pulse duration)], except here we have $\mathcal{A}$ as an extra learnable parameter.
 
+<br>
 
 ### Defining the Loss
 
