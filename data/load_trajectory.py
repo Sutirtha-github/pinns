@@ -1,11 +1,11 @@
 import torch
 import numpy as np
 from scipy.integrate import solve_ivp
-from data.data_utils import rabi_freq, detuning, mixangle, eig_split, phonon_abs, phonon_emiss
+from data.data_utils import phonon_abs, phonon_emiss
 
 
 
-def bloch_eqs(t, S, A, v_c, T, D, Om_0):
+def bloch_eqs(t, S, A, v_c, T, D):
     """
     Computes LHS of the Lindblad differential equations.
 
@@ -16,41 +16,32 @@ def bloch_eqs(t, S, A, v_c, T, D, Om_0):
         v_c: cutoff frequency (1/ps)
         T: bath temperature (K)
         D: pulse duration (ps)
-        Om_0: rabi frequency amplitude (1/ps)
         
     Returns:
         dsx_dt, dsy_dt, dsz_dt: time derivative of Bloch vector coordinates
     """
     
     sx, sy, sz = S
-    eps = 1e-10
-    t_tensor = torch.tensor([t], dtype=torch.float32)
 
-    om = rabi_freq(t=t_tensor, D=D, Om_0=Om_0)
-    delta = detuning(t=t_tensor, D=D, Om_0=Om_0)
-    theta = mixangle(t=t_tensor, D=D)
-    L = eig_split(om, delta) + eps
-    ga = phonon_abs(v=L, A=A, v_c=v_c, T=T, theta=theta)
-    ge = phonon_emiss(v=L, A=A, v_c=v_c, T=T, theta=theta)
+    om = np.pi/D
+    ga = phonon_abs(v=om, A=A, v_c=v_c, T=T)
+    ge = phonon_emiss(v=om, A=A, v_c=v_c, T=T)
 
-    dsx_dt = -om * (ga - ge) / L - (delta**2 + 2 * om**2) * (ga + ge) * sx / (2 * L**2) \
-             - delta * sy + delta * om * (ga + ge) * sz / (2 * L**2)
-    dsy_dt = delta * sx - (ga + ge) * sy / 2 + om * sz
-    dsz_dt = delta * (ga - ge) / L + delta * om * (ga + ge) * sx / (2 * L**2) \
-             - om * sy - (2 * delta**2 + om**2) * (ga + ge) * sz / (2 * L**2)
+    dsx_dt = -0.5 * (ga - ge) - (ga + ge) * sx 
+    dsy_dt = - 0.5 * (ga + ge) * sy  + om * sz
+    dsz_dt = - om * sy - 0.5 * (ga + ge) * sz 
 
     return [dsx_dt.item(), dsy_dt.item(), dsz_dt.item()]
 
 
 
 
-def generate_bloch_trajectory(A, v_c, T, D, Om_0, S0=[0.0, 0.0, -1.0], t_intervals=150, return_tensor=True, plot=False):
+def generate_bloch_trajectory(A, v_c, T, D, S0=[0.0, 0.0, -1.0], t_intervals=150, return_tensor=True, plot=False):
     """
     Numerically solve the Bloch equations for a given initial condition.
 
     Args:
         D: pulse duration (ps)
-        Om_0: rabi frequency amplitude (1/ps))
         S0: initial Bloch vector coordinates [sx0 = 0, sy0 = 0, sz0 = -1]
         t_intervals: # time points between 0 to D
         return_tensor: if True, returns PyTorch tensors, else NumPy arrays
@@ -64,7 +55,7 @@ def generate_bloch_trajectory(A, v_c, T, D, Om_0, S0=[0.0, 0.0, -1.0], t_interva
     t_eval = np.linspace(t_span[0], t_span[1], t_intervals)
     S0 = np.array(S0, dtype=float)
 
-    sol = solve_ivp(bloch_eqs, t_span, S0, t_eval=t_eval, args=(A, v_c, T, D, Om_0), rtol=1e-8, atol=1e-8)
+    sol = solve_ivp(bloch_eqs, t_span, S0, t_eval=t_eval, args=(A, v_c, T, D), rtol=1e-8, atol=1e-8)
 
     if not sol.success:
         raise RuntimeError("ODE solver failed!")

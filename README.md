@@ -34,15 +34,7 @@ $J(\omega) = \frac{\hbar A}{\pi k_B}\omega^3 e^{-\omega^2/\omega_c^2}$ represent
 
 at frequency $\omega$ and temperature $\Theta$.
 
-The Rabi frequency $\Omega(t)$ and the detuning $\Delta(t)$ are derived using methods from Shortcuts to Adiabaticity and under suitable transformations they can be expressed as
-
-$\hspace{1cm}\Omega(t) = \sqrt{E_0^2 \sin^2\theta + \dot{\theta}^2} \\
-\hspace{3cm}\Delta(t) = \frac{E_0^3 \sin^2\theta \cos\theta + \dot{E}_0\sin\theta + E_0({2\ddot{\theta}\cos\theta - \dot{\theta}^2\sin\theta)}}{E_0^2 \sin^2\theta + \dot{\theta}^2}$
-
-where, the time-dependent amplitude $E_0(\tau)$ and the mixing angle $\theta(\tau)$ are given by ($\tau$ refers to the scaled time unit, $\tau = t/D$),
-
-$\hspace{1cm}E_0(\tau) = \Omega_0\tau(1-\tau) \\
-\hspace{3cm}\theta(\tau) = \pi \tau^2(3-2\tau)$
+For simplicity, we shall use a constant $\pi$-pulse with Rabi frequency $\Omega(t) = \pi / pulse duration$ and no detuning i.e. $\Delta(t) = 0$.
 
 <br><br>
 

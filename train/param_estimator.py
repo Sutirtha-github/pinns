@@ -1,12 +1,12 @@
 import torch
 from figures.visualizations import plot_midtraining_inv1, plot_midtraining_inv2
-from train.pinn_simulation import BlochNN
-from data.data_utils import rabi_freq, detuning, mixangle, phonon_abs, phonon_emiss, phonon_abs_1, phonon_emiss_1
+from train.pinn_simulation import BlochNN, compute_physics_loss
+from data.data_utils import phonon_abs, phonon_emiss, phonon_abs_1, phonon_emiss_1
 
 
 
 
-def train_inv_pinn_1(A0, v_c, T, D, Om_0, t_obs, sx_obs, sy_obs, sz_obs, t_test, t_intervals=150, 
+def train_inv_pinn_1(A0, v_c, T, D, t_obs, sx_obs, sy_obs, sz_obs, t_test, t_intervals=150, 
                      hidden_dim=32, n_layers=4, epochs=301, lr=5e-3, plot_interval=50):
 
     """
@@ -51,34 +51,15 @@ def train_inv_pinn_1(A0, v_c, T, D, Om_0, t_obs, sx_obs, sy_obs, sz_obs, t_test,
         optimiser.zero_grad()
 
         # Compute the time dependent parameters over the entire time domain
-        rabi_list = rabi_freq(t=t_physics, D=D, Om_0=Om_0)
-        detuning_list = detuning(t=t_physics, D=D, Om_0=Om_0)
-        L_list = torch.sqrt(rabi_list**2 + detuning_list**2) + eps
-        theta_list = mixangle(t=t_physics, D=D)
-        ga_list = phonon_abs(v=L_list, A=a, v_c=v_c, T=T, theta=theta_list)
-        ge_list = phonon_emiss(v=L_list, A=a, v_c=v_c, T=T, theta=theta_list)
+        om = torch.pi/D
+        ga = phonon_abs(v=om, A=a, v_c=v_c, T=T)
+        ge = phonon_emiss(v=om, A=a, v_c=v_c, T=T)
 
         # Inference the NN for predictions over the entire time domain
         s_pred = pinn(t_physics)
-        sx_pred, sy_pred, sz_pred = s_pred[:, 0:1], s_pred[:, 1:2], s_pred[:, 2:3]
 
-        # Compute time derivatives of the predictions
-        dsx_dt = torch.autograd.grad(sx_pred, t_physics, torch.ones_like(sx_pred), create_graph=True)[0]
-        dsy_dt = torch.autograd.grad(sy_pred, t_physics, torch.ones_like(sy_pred), create_graph=True)[0]
-        dsz_dt = torch.autograd.grad(sz_pred, t_physics, torch.ones_like(sz_pred), create_graph=True)[0]
-
-        # Calculate the mean (physics) loss as the difference between lhs and rhs of the differential equations squared
-        loss_sx = torch.mean((dsx_dt + rabi_list*(ga_list-ge_list)/L_list + 
-                              (detuning_list**2 + 2*rabi_list**2)*(ga_list+ge_list)*sx_pred/(2*L_list**2) +
-                              detuning_list*sy_pred - detuning_list*rabi_list*(ga_list+ge_list)*sz_pred/(2*L_list**2))**2)
-
-        loss_sy = torch.mean((dsy_dt - detuning_list*sx_pred + (ga_list+ge_list)*sy_pred/2 - rabi_list*sz_pred)**2)
-
-        loss_sz = torch.mean((dsz_dt - detuning_list*(ga_list-ge_list)/L_list - 
-                              detuning_list*rabi_list*(ga_list+ge_list)*sx_pred/(2*L_list**2) + 
-                              rabi_list*sy_pred + (2*detuning_list**2+rabi_list**2)*(ga_list+ge_list)*sz_pred/(2*L_list**2))**2)
-
-        loss_p = loss_sx + loss_sy + loss_sz
+        # Calculate physics loss over the entire time domain
+        loss_p = compute_physics_loss(s_pred, t_physics, om, ga, ge)
 
         # Inference the NN for predictions over the observation time instances only
         s_obs_pred = pinn(t_obs)
@@ -104,7 +85,7 @@ def train_inv_pinn_1(A0, v_c, T, D, Om_0, t_obs, sx_obs, sy_obs, sz_obs, t_test,
 
 
 
-def train_inv_pinn_2(v_c0, alpha, T, D, Om_0, t_obs, sx_obs, sy_obs, sz_obs, t_test, t_intervals=150, 
+def train_inv_pinn_2(v_c0, alpha, T, D, t_obs, sx_obs, sy_obs, sz_obs, t_test, t_intervals=150, 
                      hidden_dim=32, n_layers=4, lambda1=1e2, lr=1e-2, seed=2021, epochs=1001, plot_intervals=100):
 
     """
@@ -134,7 +115,7 @@ def train_inv_pinn_2(v_c0, alpha, T, D, Om_0, t_obs, sx_obs, sy_obs, sz_obs, t_t
     
     
     torch.manual_seed(seed)
-    eps = 1e-10
+    
                       
     # define PINN and additional learnable parameter 'v_c_pred' to learn the bath cutoff frequency (in 1/ps units)
     pinn = BlochNN(1, 3, hidden_dim, n_layers)
@@ -149,34 +130,14 @@ def train_inv_pinn_2(v_c0, alpha, T, D, Om_0, t_obs, sx_obs, sy_obs, sz_obs, t_t
         optimiser.zero_grad()
 
         # Compute the time dependent parameters over the entire time domain
-        rabi_list = rabi_freq(t=t_physics, D=D, Om_0=Om_0)
-        detuning_list = detuning(t=t_physics, D=D, Om_0=Om_0)
-        L_list = torch.sqrt(rabi_list ** 2 + detuning_list ** 2) + eps
-        theta_list = mixangle(t=t_physics, D=D)
-        ga_list = phonon_abs_1(v=L_list, theta=theta_list, v_c=v_c_pred, alpha=alpha, T=T)
-        ge_list = phonon_emiss_1(v=L_list, theta=theta_list, v_c=v_c_pred, alpha=alpha, T=T)
+        om = torch.pi/D
+        ga = phonon_abs_1(v=om, v_c=v_c_pred, alpha=alpha, T=T)
+        ge = phonon_emiss_1(v=om, v_c=v_c_pred, alpha=alpha, T=T)
 
         # Inference the NN for predictions over the entire time domain
         s_pred = pinn(t_physics)
-        sx_pred, sy_pred, sz_pred = s_pred[:, 0:1], s_pred[:, 1:2], s_pred[:, 2:3]
 
-        # Compute time derivatives of the predictions
-        dsx_dt = torch.autograd.grad(sx_pred, t_physics, torch.ones_like(sx_pred), create_graph=True)[0]
-        dsy_dt = torch.autograd.grad(sy_pred, t_physics, torch.ones_like(sy_pred), create_graph=True)[0]
-        dsz_dt = torch.autograd.grad(sz_pred, t_physics, torch.ones_like(sz_pred), create_graph=True)[0]
-
-        # Calculate the mean (physics) loss as the difference between lhs and rhs of the differential equations squared
-        loss_sx = torch.mean((dsx_dt + rabi_list * (ga_list - ge_list) / L_list +
-                (detuning_list ** 2 + 2 * rabi_list ** 2) * (ga_list + ge_list) * sx_pred / (2 * L_list ** 2) +
-                detuning_list * sy_pred - detuning_list * rabi_list * (ga_list + ge_list) * sz_pred / (2 * L_list ** 2)) ** 2)
-
-        loss_sy = torch.mean((dsy_dt - detuning_list * sx_pred + (ga_list + ge_list) * sy_pred / 2 - rabi_list * sz_pred) ** 2)
-
-        loss_sz = torch.mean((dsz_dt - detuning_list * (ga_list - ge_list) / L_list -
-                detuning_list * rabi_list * (ga_list + ge_list) * sx_pred / (2 * L_list ** 2) +
-                rabi_list * sy_pred + (2 * detuning_list ** 2 + rabi_list ** 2) * (ga_list + ge_list) * sz_pred / (2 * L_list ** 2)) ** 2)
-
-        loss_p = torch.mean(loss_sx + loss_sy + loss_sz)
+        loss_p = compute_physics_loss(s_pred, t_physics, om, ga, ge)
 
       
         # Inference the NN for predictions over the observation time instances only
